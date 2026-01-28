@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our First Year</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+            opacity: 0.9;
+            margin-bottom: 40px;
+        }
+
+        .gallery-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .photo-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            overflow: hidden;
+            border-radius: 10px;
+            background: #000;
+        }
+
+        .photo {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .photo.active {
+            opacity: 1;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .play-pause {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .play-pause:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .counter {
+            margin-top: 20px;
+            font-size: 1rem;
+            opacity: 0.8;
+            font-weight: 300;
+        }
+
+        .love-message {
+            margin-top: 40px;
+            font-size: 1.5rem;
+            font-style: italic;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .photo-container {
+                height: 400px;
+            }
+
+            .love-message {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .photo-container {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>1 Year With My BBG</h1>
+        
+        <div class="gallery-wrapper">
+            <div class="photo-container" id="photoContainer">
+                <!-- Photos will be inserted here by JavaScript -->
+            </div>
+            
+            <div class="controls">
+                <button class="nav-btn" id="prevBtn">‹</button>
+                <button class="play-pause" id="playPauseBtn">Pause</button>
+                <button class="nav-btn" id="nextBtn">›</button>
+            </div>
+            
+            <div class="counter" id="counter">1 / 100</div>
+        </div>
+        
+        <p class="love-message"><3</p>
+    </div>
+
+    <script>
+        // Photo array - you'll need to add your photo filenames here
+        const photos = [];
+        for (let i = 1; i <= 62; i++) {
+            photos.push(`photo(${i}).JPEG`);
+        }
+
+        let currentIndex = 0;
+        let isPlaying = true;
+        let intervalId;
+
+        const photoContainer = document.getElementById('photoContainer');
+        const counter = document.getElementById('counter');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        // Create all photo elements
+        photos.forEach((photo, index) => {
+            const img = document.createElement('img');
+            img.src = photo;
+            img.className = 'photo';
+            if (index === 0) img.classList.add('active');
+            img.alt = `Photo ${index + 1}`;
+            photoContainer.appendChild(img);
+        });
+
+        const photoElements = document.querySelectorAll('.photo');
+
+        function showPhoto(index) {
+            photoElements.forEach((photo, i) => {
+                photo.classList.remove('active');
+                if (i === index) {
+                    photo.classList.add('active');
+                }
+            });
+            counter.textContent = `${index + 1} / ${photos.length}`;
+        }
+
+        function nextPhoto() {
+            currentIndex = (currentIndex + 1) % photos.length;
+            showPhoto(currentIndex);
+        }
+
+        function prevPhoto() {
+            currentIndex = (currentIndex - 1 + photos.length) % photos.length;
+            showPhoto(currentIndex);
+        }
+
+        function togglePlayPause() {
+            isPlaying = !isPlaying;
+            if (isPlaying) {
+                playPauseBtn.textContent = 'Pause';
+                startSlideshow();
+            } else {
+                playPauseBtn.textContent = 'Play';
+                stopSlideshow();
+            }
+        }
+
+        function startSlideshow() {
+            intervalId = setInterval(nextPhoto, 5000);
+        }
+
+        function stopSlideshow() {
+            clearInterval(intervalId);
+        }
+
+        // Event listeners
+        playPauseBtn.addEventListener('click', togglePlayPause);
+        nextBtn.addEventListener('click', () => {
+            nextPhoto();
+            if (isPlaying) {
+                stopSlideshow();
+                startSlideshow();
+            }
+        });
+        prevBtn.addEventListener('click', () => {
+            prevPhoto();
+            if (isPlaying) {
+                stopSlideshow();
+                startSlideshow();
+            }
+        });
+
+        // Start the slideshow
+        startSlideshow();
+    </script>
+</body>
+</html>
