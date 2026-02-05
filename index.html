@@ -5,18 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Our First Year</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
         
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
         }
 
         html, body {
             height: 100%;
             overflow: hidden;
-            font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-family: 'Press Start 2P', cursive;
         }
 
         body {
@@ -42,8 +45,10 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-            opacity: 0.03;
+            background-image: 
+                repeating-linear-gradient(0deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 2px, transparent 2px, transparent 4px),
+                repeating-linear-gradient(90deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 2px, transparent 2px, transparent 4px);
+            opacity: 0.3;
             pointer-events: none;
             z-index: 1;
         }
@@ -70,32 +75,34 @@
             text-align: center;
             padding: 40px;
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 
+                0 0 0 4px rgba(0, 0, 0, 0.5),
+                inset 0 0 0 4px rgba(0, 0, 0, 0.5);
         }
 
         .entry-box h2 {
-            margin-bottom: 20px;
-            font-weight: 300;
-            font-size: 1.5rem;
+            margin-bottom: 30px;
+            font-size: 1rem;
+            text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.5);
         }
 
         .entry-box input {
             padding: 15px 20px;
-            font-size: 1rem;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.1);
+            font-size: 0.8rem;
+            border: 4px solid rgba(255, 255, 255, 0.4);
+            background: rgba(0, 0, 0, 0.5);
             color: white;
-            border-radius: 10px;
             outline: none;
-            font-family: 'Inter', sans-serif;
-            width: 250px;
-            transition: all 0.3s ease;
+            font-family: 'Press Start 2P', cursive;
+            width: 280px;
+            transition: all 0.2s ease;
+            box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.5);
         }
 
         .entry-box input:focus {
-            border-color: rgba(255, 255, 255, 0.5);
-            background: rgba(255, 255, 255, 0.15);
+            border-color: #48dbfb;
+            background: rgba(0, 0, 0, 0.7);
         }
 
         .entry-box input::placeholder {
@@ -103,29 +110,42 @@
         }
 
         .entry-box button {
-            margin-top: 15px;
-            padding: 12px 40px;
+            margin-top: 20px;
+            padding: 15px 40px;
             background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            border: 4px solid rgba(255, 255, 255, 0.4);
             color: white;
-            border-radius: 10px;
             cursor: pointer;
-            font-size: 1rem;
-            font-family: 'Inter', sans-serif;
-            transition: all 0.3s ease;
+            font-size: 0.8rem;
+            font-family: 'Press Start 2P', cursive;
+            transition: all 0.1s ease;
+            box-shadow: 
+                0 0 0 2px rgba(0, 0, 0, 0.5),
+                inset 0 0 0 2px rgba(0, 0, 0, 0.5);
         }
 
         .entry-box button:hover {
             background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.05);
+            transform: translate(2px, 2px);
+            box-shadow: 
+                -2px -2px 0 2px rgba(0, 0, 0, 0.5),
+                inset 0 0 0 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .entry-box button:active {
+            transform: translate(4px, 4px);
+            box-shadow: 
+                -4px -4px 0 2px rgba(0, 0, 0, 0.5),
+                inset 0 0 0 2px rgba(0, 0, 0, 0.5);
         }
 
         .err-msg {
             color: #ff6b6b;
-            margin-top: 10px;
-            font-size: 0.9rem;
+            margin-top: 15px;
+            font-size: 0.6rem;
             opacity: 0;
             transition: opacity 0.3s;
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
         }
 
         .err-msg.show {
@@ -141,11 +161,11 @@
         }
 
         h1 {
-            font-size: 3rem;
-            font-weight: 300;
-            margin-bottom: 50px;
-            letter-spacing: 3px;
-            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+            font-size: 2rem;
+            margin-bottom: 40px;
+            letter-spacing: 2px;
+            text-shadow: 4px 4px 0px rgba(0, 0, 0, 0.5);
+            line-height: 1.5;
         }
 
         .gallery-wrapper {
@@ -153,12 +173,14 @@
             width: 100%;
             max-width: 900px;
             margin: 0 auto;
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.3);
             backdrop-filter: blur(20px);
-            border-radius: 16px;
             padding: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 
+                0 0 0 4px rgba(255, 255, 255, 0.2),
+                0 0 0 8px rgba(0, 0, 0, 0.5),
+                inset 0 0 0 4px rgba(0, 0, 0, 0.5);
+            border: 4px solid rgba(255, 255, 255, 0.1);
         }
 
         .photo-container {
@@ -166,9 +188,11 @@
             width: 100%;
             height: 550px;
             overflow: hidden;
-            border-radius: 12px;
             background: #000;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            box-shadow: 
+                0 0 0 4px rgba(255, 255, 255, 0.2),
+                inset 0 0 0 4px rgba(0, 0, 0, 0.5);
+            border: 4px solid rgba(255, 255, 255, 0.3);
         }
 
         .photo {
@@ -202,62 +226,111 @@
 
         .nav-btn, .fullscreen-btn {
             background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 4px solid rgba(255, 255, 255, 0.3);
             color: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
+            width: 60px;
+            height: 60px;
             cursor: pointer;
-            font-size: 24px;
+            font-size: 28px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s ease;
+            transition: all 0.1s ease;
             backdrop-filter: blur(10px);
+            font-family: 'Press Start 2P', cursive;
+            box-shadow: 
+                0 0 0 2px rgba(0, 0, 0, 0.5),
+                inset 0 0 0 2px rgba(0, 0, 0, 0.5);
         }
 
         .nav-btn:hover, .fullscreen-btn:hover {
             background: rgba(255, 255, 255, 0.25);
-            transform: scale(1.1);
+            transform: translate(2px, 2px);
+            box-shadow: 
+                -2px -2px 0 2px rgba(0, 0, 0, 0.5),
+                inset 0 0 0 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-btn:active, .fullscreen-btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: 
+                -4px -4px 0 2px rgba(0, 0, 0, 0.5),
+                inset 0 0 0 2px rgba(0, 0, 0, 0.5);
         }
 
         .play-pause {
             background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 4px solid rgba(255, 255, 255, 0.3);
             color: white;
-            padding: 14px 35px;
-            border-radius: 25px;
+            padding: 18px 35px;
             cursor: pointer;
-            font-size: 15px;
-            transition: all 0.3s ease;
-            font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            font-weight: 400;
+            font-size: 0.7rem;
+            transition: all 0.1s ease;
+            font-family: 'Press Start 2P', cursive;
             backdrop-filter: blur(10px);
+            box-shadow: 
+                0 0 0 2px rgba(0, 0, 0, 0.5),
+                inset 0 0 0 2px rgba(0, 0, 0, 0.5);
         }
 
         .play-pause:hover {
             background: rgba(255, 255, 255, 0.25);
-            transform: scale(1.05);
+            transform: translate(2px, 2px);
+            box-shadow: 
+                -2px -2px 0 2px rgba(0, 0, 0, 0.5),
+                inset 0 0 0 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .play-pause:active {
+            transform: translate(4px, 4px);
+            box-shadow: 
+                -4px -4px 0 2px rgba(0, 0, 0, 0.5),
+                inset 0 0 0 2px rgba(0, 0, 0, 0.5);
         }
 
         .counter {
             margin-top: 25px;
-            font-size: 1rem;
-            opacity: 0.7;
-            font-weight: 300;
+            font-size: 0.7rem;
+            opacity: 0.8;
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
         }
 
         .love-message {
-            margin-top: 50px;
-            font-size: 2rem;
+            margin-top: 40px;
+            font-size: 0.8rem;
             opacity: 0.9;
-            font-weight: 300;
-            text-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+            text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.5);
+            line-height: 1.8;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 
+                0 0 0 2px rgba(0, 0, 0, 0.5),
+                inset 0 0 0 2px rgba(0, 0, 0, 0.5);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .time-unit {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 12px;
+            margin: 4px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 
+                0 0 0 2px rgba(0, 0, 0, 0.5),
+                inset 0 0 0 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .time-number {
+            color: #48dbfb;
+            font-size: 1em;
         }
 
         @media (max-width: 768px) {
             h1 {
-                font-size: 2rem;
+                font-size: 1.2rem;
                 margin-bottom: 30px;
             }
 
@@ -266,17 +339,24 @@
             }
 
             .love-message {
-                font-size: 1.5rem;
+                font-size: 0.6rem;
+                padding: 15px;
             }
 
             .gallery-wrapper {
                 padding: 20px;
             }
+
+            .time-unit {
+                padding: 6px 10px;
+                margin: 3px;
+                font-size: 0.9rem;
+            }
         }
 
         @media (max-width: 480px) {
             h1 {
-                font-size: 1.5rem;
+                font-size: 0.9rem;
             }
 
             .photo-container {
@@ -288,8 +368,25 @@
             }
 
             .nav-btn, .fullscreen-btn {
-                width: 45px;
-                height: 45px;
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+
+            .play-pause {
+                font-size: 0.5rem;
+                padding: 15px 25px;
+            }
+
+            .love-message {
+                font-size: 0.5rem;
+                padding: 12px;
+            }
+
+            .time-unit {
+                padding: 4px 8px;
+                margin: 2px;
+                font-size: 0.8rem;
             }
         }
     </style>
@@ -357,21 +454,17 @@
             const diffTime = today - startDate;
             
             if (diffTime < 0) {
-                document.getElementById('dayCounter').textContent = 'Counting down... ♥';
+                document.getElementById('dayCounter').innerHTML = '♥ LOADING... ♥';
                 return;
             }
             
             let remaining = diffTime;
             
-            const years = Math.floor(remaining / (1000 * 60 * 60 * 24 * 365.25));
-            remaining -= years * (1000 * 60 * 60 * 24 * 365.25);
+            const totalDays = Math.floor(remaining / (1000 * 60 * 60 * 24));
+            const totalHours = Math.floor(remaining / (1000 * 60 * 60));
+            const totalMinutes = Math.floor(remaining / (1000 * 60));
             
-            const months = Math.floor(remaining / (1000 * 60 * 60 * 24 * 30.44));
-            remaining -= months * (1000 * 60 * 60 * 24 * 30.44);
-            
-            const weeks = Math.floor(remaining / (1000 * 60 * 60 * 24 * 7));
-            remaining -= weeks * (1000 * 60 * 60 * 24 * 7);
-            
+            remaining = diffTime;
             const days = Math.floor(remaining / (1000 * 60 * 60 * 24));
             remaining -= days * (1000 * 60 * 60 * 24);
             
@@ -380,19 +473,29 @@
             
             const minutes = Math.floor(remaining / (1000 * 60));
             
-            const parts = [];
-            if (years > 0) parts.push(`${years} year${years !== 1 ? 's' : ''}`);
-            if (months > 0) parts.push(`${months} month${months !== 1 ? 's' : ''}`);
-            if (weeks > 0) parts.push(`${weeks} week${weeks !== 1 ? 's' : ''}`);
-            if (days > 0) parts.push(`${days} day${days !== 1 ? 's' : ''}`);
-            if (hours > 0) parts.push(`${hours} hour${hours !== 1 ? 's' : ''}`);
-            if (minutes > 0) parts.push(`${minutes} minute${minutes !== 1 ? 's' : ''}`);
+            let display = '';
             
-            if (parts.length === 0) {
-                document.getElementById('dayCounter').textContent = 'Just started! ♥';
+            if (totalDays === 0 && totalHours === 0) {
+                display = `♥ ${minutes} MIN${minutes !== 1 ? 'S' : ''} ♥`;
+            } else if (totalDays === 0) {
+                display = `♥ ${hours}H ${minutes}M ♥`;
+            } else if (totalDays < 30) {
+                display = `<span class="time-unit"><span class="time-number">${days}</span> DAY${days !== 1 ? 'S' : ''}</span>`;
+                if (hours > 0 || minutes > 0) {
+                    display += ` <span class="time-unit"><span class="time-number">${hours}</span>H</span> <span class="time-unit"><span class="time-number">${minutes}</span>M</span>`;
+                }
+                display = `♥ ${display} ♥`;
             } else {
-                document.getElementById('dayCounter').textContent = parts.join(', ') + ' together ♥';
+                const months = Math.floor(totalDays / 30);
+                const remainingDays = totalDays % 30;
+                display = `<span class="time-unit"><span class="time-number">${months}</span> MONTH${months !== 1 ? 'S' : ''}</span>`;
+                if (remainingDays > 0) {
+                    display += ` <span class="time-unit"><span class="time-number">${remainingDays}</span> DAY${remainingDays !== 1 ? 'S' : ''}</span>`;
+                }
+                display = `♥ ${display} ♥`;
             }
+            
+            document.getElementById('dayCounter').innerHTML = display;
         }
 
         updateDayCounter();
