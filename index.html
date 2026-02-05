@@ -35,7 +35,6 @@
             position: relative;
         }
 
-        /* Animated grain texture overlay */
         body::before {
             content: '';
             position: fixed;
@@ -49,7 +48,7 @@
             z-index: 1;
         }
 
-        .password-overlay {
+        .auth-layer {
             position: fixed;
             top: 0;
             left: 0;
@@ -63,11 +62,11 @@
             backdrop-filter: blur(10px);
         }
 
-        .password-overlay.hidden {
+        .auth-layer.hidden {
             display: none;
         }
 
-        .password-box {
+        .entry-box {
             text-align: center;
             padding: 40px;
             background: rgba(255, 255, 255, 0.05);
@@ -75,13 +74,13 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .password-box h2 {
+        .entry-box h2 {
             margin-bottom: 20px;
             font-weight: 300;
             font-size: 1.5rem;
         }
 
-        .password-box input {
+        .entry-box input {
             padding: 15px 20px;
             font-size: 1rem;
             border: 2px solid rgba(255, 255, 255, 0.2);
@@ -94,16 +93,16 @@
             transition: all 0.3s ease;
         }
 
-        .password-box input:focus {
+        .entry-box input:focus {
             border-color: rgba(255, 255, 255, 0.5);
             background: rgba(255, 255, 255, 0.15);
         }
 
-        .password-box input::placeholder {
+        .entry-box input::placeholder {
             color: rgba(255, 255, 255, 0.5);
         }
 
-        .password-box button {
+        .entry-box button {
             margin-top: 15px;
             padding: 12px 40px;
             background: rgba(255, 255, 255, 0.2);
@@ -116,12 +115,12 @@
             transition: all 0.3s ease;
         }
 
-        .password-box button:hover {
+        .entry-box button:hover {
             background: rgba(255, 255, 255, 0.3);
             transform: scale(1.05);
         }
 
-        .error-message {
+        .err-msg {
             color: #ff6b6b;
             margin-top: 10px;
             font-size: 0.9rem;
@@ -129,7 +128,7 @@
             transition: opacity 0.3s;
         }
 
-        .error-message.show {
+        .err-msg.show {
             opacity: 1;
         }
 
@@ -181,6 +180,11 @@
             object-fit: contain;
             opacity: 0;
             transition: opacity 1s ease-in-out;
+            pointer-events: none;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
         }
 
         .photo.active {
@@ -290,12 +294,12 @@
     </style>
 </head>
 <body>
-    <div class="password-overlay" id="passwordOverlay">
-        <div class="password-box">
-            <h2>Enter Password</h2>
-            <input type="password" id="passwordInput" placeholder="Password" />
+    <div class="auth-layer" id="gate">
+        <div class="entry-box">
+            <h2>Enter Code</h2>
+            <input type="password" id="key" placeholder="Code" />
             <button onclick="checkPassword()">Enter</button>
-            <div class="error-message" id="errorMessage">Incorrect password</div>
+            <div class="err-msg" id="status">Incorrect code</div>
         </div>
     </div>
 
@@ -304,7 +308,6 @@
         
         <div class="gallery-wrapper">
             <div class="photo-container" id="photoContainer">
-                <!-- Photos will be inserted here by JavaScript -->
             </div>
             
             <div class="controls">
@@ -320,43 +323,37 @@
     </div>
 
     <script>
-        // Password protection
-        const PASSWORD = "BBG"; // Change this to your desired password
+        const _0x4a8f = String.fromCharCode(66,79,71,52);
         
         function checkPassword() {
-            const input = document.getElementById('passwordInput').value;
-            const errorMsg = document.getElementById('errorMessage');
+            const input = document.getElementById('key').value;
+            const errorMsg = document.getElementById('status');
             
-            if (input === PASSWORD) {
-                localStorage.setItem('siteAccess', 'granted');
-                document.getElementById('passwordOverlay').classList.add('hidden');
+            if (input === _0x4a8f) {
+                localStorage.setItem('x7k2m9p', 'ok');
+                document.getElementById('gate').classList.add('hidden');
             } else {
                 errorMsg.classList.add('show');
                 setTimeout(() => errorMsg.classList.remove('show'), 2000);
             }
         }
 
-        // Check if already authenticated
-        if (localStorage.getItem('siteAccess') === 'granted') {
-            document.getElementById('passwordOverlay').classList.add('hidden');
+        if (localStorage.getItem('x7k2m9p') === 'ok') {
+            document.getElementById('gate').classList.add('hidden');
         }
 
-        // Allow enter key to submit password
-        document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+        document.getElementById('key').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 checkPassword();
             }
         });
 
-        // Day counter function
         function updateDayCounter() {
             const startDate = new Date('2025-02-03T00:00:00');
             const today = new Date();
             
-            // Calculate difference in milliseconds
             const diffTime = today - startDate;
             
-            // Convert to days
             const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
             
             const counterElement = document.getElementById('dayCounter');
@@ -372,18 +369,17 @@
             }
         }
 
-        // Update counter immediately and then every hour
         updateDayCounter();
-        setInterval(updateDayCounter, 3600000); // Update every hour
+        setInterval(updateDayCounter, 3600000);
 
-        // Photo array
-        const photos = [];
+        const _0x3d = [];
+        const _0x7b = String.fromCharCode(112,104,111,116,111,32,40);
+        const _0x9c = String.fromCharCode(41,46,74,80,69,71);
         for (let i = 1; i <= 62; i++) {
-            photos.push(`photo (${i}).JPEG`);
+            _0x3d.push(_0x7b + i + _0x9c);
         }
 
-        // Shuffle array function (Fisher-Yates algorithm)
-        function shuffleArray(array) {
+        function _0x2f4a(array) {
             const shuffled = [...array];
             for (let i = shuffled.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -392,8 +388,7 @@
             return shuffled;
         }
 
-        // Randomize the photo order
-        const shuffledPhotos = shuffleArray(photos);
+        const shuffledPhotos = _0x2f4a(_0x3d);
 
         let currentIndex = 0;
         let isPlaying = true;
@@ -405,10 +400,16 @@
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
 
-        // Create all photo elements
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || 
+                (e.ctrlKey && e.shiftKey && e.key === 'J') || (e.ctrlKey && e.key === 'U')) {
+                e.preventDefault();
+            }
+        });
+
         shuffledPhotos.forEach((photo, index) => {
             const img = document.createElement('img');
-            // Only load the first image immediately, lazy load the rest
             if (index === 0) {
                 img.src = photo;
             } else {
@@ -417,6 +418,8 @@
             img.className = 'photo';
             if (index === 0) img.classList.add('active');
             img.alt = `Photo ${index + 1}`;
+            img.draggable = false;
+            img.oncontextmenu = () => false;
             photoContainer.appendChild(img);
         });
 
@@ -426,14 +429,12 @@
             photoElements.forEach((photo, i) => {
                 photo.classList.remove('active');
                 if (i === index) {
-                    // Load the image if it hasn't been loaded yet
                     if (photo.dataset.src) {
                         photo.src = photo.dataset.src;
                         delete photo.dataset.src;
                     }
                     photo.classList.add('active');
                     
-                    // Preload next photo
                     const nextIndex = (index + 1) % shuffledPhotos.length;
                     if (photoElements[nextIndex].dataset.src) {
                         photoElements[nextIndex].src = photoElements[nextIndex].dataset.src;
@@ -473,7 +474,6 @@
             clearInterval(intervalId);
         }
 
-        // Event listeners
         playPauseBtn.addEventListener('click', togglePlayPause);
         nextBtn.addEventListener('click', () => {
             nextPhoto();
@@ -490,7 +490,6 @@
             }
         });
 
-        // Start the slideshow
         startSlideshow();
     </script>
 </body>
