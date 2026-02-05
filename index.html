@@ -24,11 +24,15 @@
 
         body {
             background: 
-                linear-gradient(125deg, rgba(255,107,107,0.3) 0%, transparent 40%),
-                linear-gradient(215deg, rgba(255,191,105,0.3) 0%, transparent 40%),
-                linear-gradient(336deg, rgba(72,219,251,0.3) 0%, transparent 50%),
-                linear-gradient(27deg, rgba(118,75,162,0.4) 0%, transparent 50%),
-                #0f0c29;
+                linear-gradient(135deg, 
+                    #667eea 0%, 
+                    #764ba2 25%,
+                    #f093fb 50%,
+                    #4facfe 75%,
+                    #667eea 100%
+                );
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
             background-attachment: fixed;
             display: flex;
             align-items: center;
@@ -36,6 +40,12 @@
             color: #fff;
             padding: 20px;
             position: relative;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         body::before {
@@ -458,39 +468,44 @@
                 return;
             }
             
-            let remaining = diffTime;
+            let years = today.getFullYear() - startDate.getFullYear();
+            let months = today.getMonth() - startDate.getMonth();
+            let days = today.getDate() - startDate.getDate();
             
-            const totalDays = Math.floor(remaining / (1000 * 60 * 60 * 24));
-            const totalHours = Math.floor(remaining / (1000 * 60 * 60));
-            const totalMinutes = Math.floor(remaining / (1000 * 60));
+            if (days < 0) {
+                months--;
+                const prevMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+                days += prevMonth.getDate();
+            }
             
-            remaining = diffTime;
-            const days = Math.floor(remaining / (1000 * 60 * 60 * 24));
-            remaining -= days * (1000 * 60 * 60 * 24);
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
             
-            const hours = Math.floor(remaining / (1000 * 60 * 60));
-            remaining -= hours * (1000 * 60 * 60);
+            const totalMonths = years * 12 + months;
             
-            const minutes = Math.floor(remaining / (1000 * 60));
+            const hours = today.getHours();
+            const minutes = today.getMinutes();
             
             let display = '';
             
-            if (totalDays === 0 && totalHours === 0) {
-                display = `♥ ${minutes} MIN${minutes !== 1 ? 'S' : ''} ♥`;
-            } else if (totalDays === 0) {
-                display = `♥ ${hours}H ${minutes}M ♥`;
-            } else if (totalDays < 30) {
+            if (totalMonths === 0 && days === 0) {
+                if (hours === 0) {
+                    display = `♥ ${minutes} MIN${minutes !== 1 ? 'S' : ''} ♥`;
+                } else {
+                    display = `♥ ${hours}H ${minutes}M ♥`;
+                }
+            } else if (totalMonths === 0) {
                 display = `<span class="time-unit"><span class="time-number">${days}</span> DAY${days !== 1 ? 'S' : ''}</span>`;
                 if (hours > 0 || minutes > 0) {
                     display += ` <span class="time-unit"><span class="time-number">${hours}</span>H</span> <span class="time-unit"><span class="time-number">${minutes}</span>M</span>`;
                 }
                 display = `♥ ${display} ♥`;
             } else {
-                const months = Math.floor(totalDays / 30);
-                const remainingDays = totalDays % 30;
-                display = `<span class="time-unit"><span class="time-number">${months}</span> MONTH${months !== 1 ? 'S' : ''}</span>`;
-                if (remainingDays > 0) {
-                    display += ` <span class="time-unit"><span class="time-number">${remainingDays}</span> DAY${remainingDays !== 1 ? 'S' : ''}</span>`;
+                display = `<span class="time-unit"><span class="time-number">${totalMonths}</span> MONTH${totalMonths !== 1 ? 'S' : ''}</span>`;
+                if (days > 0) {
+                    display += ` <span class="time-unit"><span class="time-number">${days}</span> DAY${days !== 1 ? 'S' : ''}</span>`;
                 }
                 display = `♥ ${display} ♥`;
             }
