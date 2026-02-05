@@ -197,9 +197,10 @@
             align-items: center;
             gap: 25px;
             margin-top: 35px;
+            flex-wrap: wrap;
         }
 
-        .nav-btn {
+        .nav-btn, .fullscreen-btn {
             background: rgba(255, 255, 255, 0.15);
             border: 1px solid rgba(255, 255, 255, 0.2);
             color: white;
@@ -215,7 +216,7 @@
             backdrop-filter: blur(10px);
         }
 
-        .nav-btn:hover {
+        .nav-btn:hover, .fullscreen-btn:hover {
             background: rgba(255, 255, 255, 0.25);
             transform: scale(1.1);
         }
@@ -286,7 +287,7 @@
                 gap: 15px;
             }
 
-            .nav-btn {
+            .nav-btn, .fullscreen-btn {
                 width: 45px;
                 height: 45px;
             }
@@ -314,6 +315,7 @@
                 <button class="nav-btn" id="prevBtn">‹</button>
                 <button class="play-pause" id="playPauseBtn">Pause</button>
                 <button class="nav-btn" id="nextBtn">›</button>
+                <button class="fullscreen-btn" id="fullscreenBtn">⛶</button>
             </div>
             
             <div class="counter" id="counter">1 / 62</div>
@@ -349,28 +351,52 @@
         });
 
         function updateDayCounter() {
-            const startDate = new Date('2025-02-03T00:00:00');
+            const startDate = new Date('2025-02-03T18:00:00');
             const today = new Date();
             
             const diffTime = today - startDate;
             
-            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            if (diffTime < 0) {
+                document.getElementById('dayCounter').textContent = 'Counting down... ♥';
+                return;
+            }
             
-            const counterElement = document.getElementById('dayCounter');
+            let remaining = diffTime;
             
-            if (diffDays === 0) {
-                counterElement.textContent = 'Today is our first day together! ♥';
-            } else if (diffDays === 1) {
-                counterElement.textContent = '1 day together ♥';
-            } else if (diffDays < 0) {
-                counterElement.textContent = 'Counting down... ♥';
+            const years = Math.floor(remaining / (1000 * 60 * 60 * 24 * 365.25));
+            remaining -= years * (1000 * 60 * 60 * 24 * 365.25);
+            
+            const months = Math.floor(remaining / (1000 * 60 * 60 * 24 * 30.44));
+            remaining -= months * (1000 * 60 * 60 * 24 * 30.44);
+            
+            const weeks = Math.floor(remaining / (1000 * 60 * 60 * 24 * 7));
+            remaining -= weeks * (1000 * 60 * 60 * 24 * 7);
+            
+            const days = Math.floor(remaining / (1000 * 60 * 60 * 24));
+            remaining -= days * (1000 * 60 * 60 * 24);
+            
+            const hours = Math.floor(remaining / (1000 * 60 * 60));
+            remaining -= hours * (1000 * 60 * 60);
+            
+            const minutes = Math.floor(remaining / (1000 * 60));
+            
+            const parts = [];
+            if (years > 0) parts.push(`${years} year${years !== 1 ? 's' : ''}`);
+            if (months > 0) parts.push(`${months} month${months !== 1 ? 's' : ''}`);
+            if (weeks > 0) parts.push(`${weeks} week${weeks !== 1 ? 's' : ''}`);
+            if (days > 0) parts.push(`${days} day${days !== 1 ? 's' : ''}`);
+            if (hours > 0) parts.push(`${hours} hour${hours !== 1 ? 's' : ''}`);
+            if (minutes > 0) parts.push(`${minutes} minute${minutes !== 1 ? 's' : ''}`);
+            
+            if (parts.length === 0) {
+                document.getElementById('dayCounter').textContent = 'Just started! ♥';
             } else {
-                counterElement.textContent = `${diffDays} days together ♥`;
+                document.getElementById('dayCounter').textContent = parts.join(', ') + ' together ♥';
             }
         }
 
         updateDayCounter();
-        setInterval(updateDayCounter, 3600000);
+        setInterval(updateDayCounter, 60000);
 
         const _0x3d = [];
         const _0x7b = String.fromCharCode(112,104,111,116,111,32,40);
@@ -399,6 +425,7 @@
         const playPauseBtn = document.getElementById('playPauseBtn');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
+        const fullscreenBtn = document.getElementById('fullscreenBtn');
 
         document.addEventListener('contextmenu', e => e.preventDefault());
         document.addEventListener('keydown', e => {
@@ -407,6 +434,18 @@
                 e.preventDefault();
             }
         });
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                photoContainer.requestFullscreen().catch(err => {
+                    console.log(`Error attempting to enable fullscreen: ${err.message}`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        fullscreenBtn.addEventListener('click', toggleFullscreen);
 
         shuffledPhotos.forEach((photo, index) => {
             const img = document.createElement('img');
